@@ -1,0 +1,102 @@
+- name: Failed Login
+  severity: Medium
+  description: Linux authentication failure detected.
+  mitre_technique: T1110
+  source_types: [linux]
+  rule_type: match
+  fields: [message]
+  pattern:
+    - Failed password
+
+- name: Multiple Failed Logins
+  severity: High
+  description: Repeated Linux authentication failures from the same IP.
+  mitre_technique: T1110
+  source_types: [linux]
+  rule_type: threshold
+  fields: [message]
+  pattern:
+    - Failed password
+  threshold: 3
+  window: 30
+  group_by: [source_ip]
+
+- name: Brute Force
+  severity: Critical
+  description: Likely brute-force attempt based on concentrated failed logins.
+  mitre_technique: T1110
+  source_types: [linux]
+  rule_type: threshold
+  fields: [message]
+  pattern:
+    - Failed password
+  threshold: 5
+  window: 60
+  group_by: [source_ip]
+
+- name: Successful Login After Brute Force
+  severity: High
+  description: Successful login observed after repeated failures for the same IP.
+  mitre_technique: T1078
+  source_types: [linux]
+  rule_type: sequence
+  group_by: [source_ip]
+  sequence:
+    - fields: [message]
+      patterns: [Failed password]
+    - fields: [message]
+      patterns: [Accepted password]
+
+- name: Privilege Escalation
+  severity: High
+  description: sudo usage or privilege escalation attempt detected.
+  mitre_technique: T1548
+  source_types: [linux]
+  rule_type: match
+  fields: [message]
+  pattern:
+    - sudo
+    - session opened for user root
+
+- name: Reverse Shell Indicators
+  severity: Critical
+  description: Potential reverse shell behavior found in Linux logs.
+  mitre_technique: T1059
+  source_types: [linux]
+  rule_type: match
+  fields: [message]
+  pattern:
+    - /dev/tcp
+    - nc -e
+    - bash -i
+
+- name: wget Downloads
+  severity: Medium
+  description: Download utility execution observed.
+  mitre_technique: T1105
+  source_types: [linux]
+  rule_type: match
+  fields: [message]
+  pattern:
+    - wget
+
+- name: curl Downloads
+  severity: Medium
+  description: curl download activity observed.
+  mitre_technique: T1105
+  source_types: [linux]
+  rule_type: match
+  fields: [message]
+  pattern:
+    - curl
+
+- name: Scheduled Task Creation
+  severity: Medium
+  description: Cron or scheduled task creation detected.
+  mitre_technique: T1053
+  source_types: [linux]
+  rule_type: match
+  fields: [message]
+  pattern:
+    - CRON
+    - crontab

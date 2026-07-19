@@ -1,0 +1,12 @@
+2026-07-19 10:00:00 EventID=4625 Level=Warning Message=User=jsmith SrcIP=198.51.100.20 Status=Failed Process=winlogon.exe Command=logon
+2026-07-19 10:00:10 EventID=4625 Level=Warning Message=User=jsmith SrcIP=198.51.100.20 Status=Failed Process=winlogon.exe Command=logon
+2026-07-19 10:00:20 EventID=4625 Level=Warning Message=User=jsmith SrcIP=198.51.100.20 Status=Failed Process=winlogon.exe Command=logon
+2026-07-19 10:00:30 EventID=4625 Level=Warning Message=User=jsmith SrcIP=198.51.100.20 Status=Failed Process=winlogon.exe Command=logon
+2026-07-19 10:00:40 EventID=4625 Level=Warning Message=User=jsmith SrcIP=198.51.100.20 Status=Failed Process=winlogon.exe Command=logon
+2026-07-19 10:01:10 EventID=4624 Level=Information Message=User=jsmith SrcIP=198.51.100.20 Status=Success Process=winlogon.exe Command=interactive
+2026-07-19 10:02:00 EventID=4104 Level=Warning Message=User=jsmith SrcIP=198.51.100.20 Status=Success Process=powershell.exe Command=powershell.exe -enc SQBFAFgA
+2026-07-19 10:03:00 EventID=7045 Level=Warning Message=User=system SrcIP=127.0.0.1 Status=Success ServiceName=Updater Process=sc.exe Command=sc create updater binPath=C:\\Temp\\updater.exe
+2026-07-19 10:04:00 EventID=4698 Level=Warning Message=User=jsmith SrcIP=198.51.100.20 Status=Success Process=schtasks.exe Command=schtasks /create /tn Updater /tr C:\\Temp\\updater.exe
+2026-07-19 10:05:00 EventID=4657 Level=Warning Message=User=jsmith SrcIP=198.51.100.20 Status=Success Process=reg.exe Command=reg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run
+2026-07-19 10:06:00 EventID=4720 Level=Critical Message=User=newadmin SrcIP=198.51.100.20 Status=Success Group=Administrators Process=net.exe Command=net user newadmin /add
+2026-07-19 10:07:00 EventID=4688 Level=Warning Message=User=jsmith SrcIP=198.51.100.20 Status=Success ParentProcess=winword.exe Process=cmd.exe Command=cmd.exe /c whoami

@@ -1,0 +1,43 @@
+- name: Suspicious cmd.exe Usage
+  severity: Medium
+  description: Possible command execution attempt in Apache access log.
+  mitre_technique: T1059
+  source_types: [apache]
+  rule_type: match
+  fields: [command, message]
+  pattern:
+    - cmd=
+    - /bin/sh
+    - powershell
+
+- name: Reverse Shell Indicators
+  severity: Critical
+  description: Reverse shell patterns observed in web requests.
+  mitre_technique: T1059
+  source_types: [apache]
+  rule_type: match
+  fields: [command, message]
+  pattern:
+    - nc%20-e
+    - /dev/tcp
+    - bash%20-i
+
+- name: wget Downloads
+  severity: Medium
+  description: wget retrieval pattern detected in web traffic.
+  mitre_technique: T1105
+  source_types: [apache]
+  rule_type: match
+  fields: [command, message]
+  pattern:
+    - wget
+
+- name: curl Downloads
+  severity: Medium
+  description: curl retrieval pattern detected in web traffic.
+  mitre_technique: T1105
+  source_types: [apache]
+  rule_type: match
+  fields: [command, message]
+  pattern:
+    - curl

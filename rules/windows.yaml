@@ -1,0 +1,142 @@
+- name: Failed Login
+  severity: Medium
+  description: Windows logon failure detected.
+  mitre_technique: T1110
+  source_types: [windows]
+  rule_type: match
+  fields: [message, status]
+  pattern:
+    - Status=Failed
+    - fail
+
+- name: Multiple Failed Logins
+  severity: High
+  description: Repeated Windows logon failures from the same source.
+  mitre_technique: T1110
+  source_types: [windows]
+  rule_type: threshold
+  fields: [message, status]
+  pattern:
+    - Status=Failed
+    - fail
+  threshold: 3
+  window: 30
+  group_by: [source_ip]
+
+- name: Brute Force
+  severity: Critical
+  description: Concentrated Windows authentication failures indicate brute force.
+  mitre_technique: T1110
+  source_types: [windows]
+  rule_type: threshold
+  fields: [message, status]
+  pattern:
+    - Status=Failed
+    - fail
+  threshold: 5
+  window: 60
+  group_by: [source_ip]
+
+- name: Successful Login After Brute Force
+  severity: High
+  description: Windows successful logon followed repeated failures.
+  mitre_technique: T1078
+  source_types: [windows]
+  rule_type: sequence
+  group_by: [source_ip]
+  sequence:
+    - fields: [message, status]
+      patterns: [Status=Failed, fail]
+    - fields: [message, status]
+      patterns: [Status=Success, success]
+
+- name: New Administrator Account
+  severity: Critical
+  description: A new privileged account was created.
+  mitre_technique: T1136
+  source_types: [windows]
+  rule_type: match
+  fields: [message]
+  pattern:
+    - EventID=4720
+    - Group=Administrators
+
+- name: Suspicious PowerShell
+  severity: High
+  description: PowerShell execution observed with suspicious indicators.
+  mitre_technique: T1059
+  source_types: [windows]
+  rule_type: match
+  fields: [command, message]
+  pattern:
+    - powershell
+    - IEX
+    - Invoke-WebRequest
+
+- name: Encoded PowerShell
+  severity: Critical
+  description: Encoded PowerShell command detected.
+  mitre_technique: T1059
+  source_types: [windows]
+  rule_type: match
+  fields: [command, message]
+  pattern:
+    - -enc
+    - -encodedcommand
+
+- name: Suspicious cmd.exe Usage
+  severity: Medium
+  description: cmd.exe launched with suspicious arguments.
+  mitre_technique: T1059
+  source_types: [windows]
+  rule_type: match
+  fields: [process, command, message]
+  pattern:
+    - cmd.exe
+    - /c whoami
+    - /c net user
+
+- name: Service Installation
+  severity: High
+  description: Service installation activity detected.
+  mitre_technique: T1543
+  source_types: [windows]
+  rule_type: match
+  fields: [message]
+  pattern:
+    - EventID=7045
+    - ServiceName=
+
+- name: Scheduled Task Creation
+  severity: High
+  description: Scheduled task creation detected.
+  mitre_technique: T1053
+  source_types: [windows]
+  rule_type: match
+  fields: [command, message]
+  pattern:
+    - schtasks
+    - EventID=4698
+
+- name: Registry Modification
+  severity: Medium
+  description: Registry modification activity detected.
+  mitre_technique: T1112
+  source_types: [windows]
+  rule_type: match
+  fields: [command, message]
+  pattern:
+    - reg add
+    - HKLM\\
+
+- name: Suspicious Parent-Child Process Relationship
+  severity: High
+  description: Potentially malicious process chain detected.
+  mitre_technique: T1055
+  source_types: [windows]
+  rule_type: match
+  fields: [message]
+  pattern:
+    - ParentProcess=winword.exe
+    - ParentProcess=excel.exe
+    - Process=cmd.exe
