@@ -267,7 +267,10 @@ def summarize_findings(findings: list[DetectionResult]) -> list[dict]:
                 "description": first.description,
                 "source_ip": first.source_ip,
                 "username": first.username,
-                "count": len(group),
+                "count": max(
+                    len(first.evidence),
+                    len(group)
+                ),
                 "first_seen": group[0].timestamp,
                 "last_seen": group[-1].timestamp,
             }
