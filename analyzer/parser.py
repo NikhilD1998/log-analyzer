@@ -6,7 +6,7 @@ from pathlib import Path
 import logging
 import re
 
-from utils import LOGGER, NormalizedLog, parse_datetime, safe_read_lines
+from analyzer.utils import LOGGER, NormalizedLog, parse_datetime, safe_read_lines
 
 
 LINUX_AUTH_PATTERN = re.compile(

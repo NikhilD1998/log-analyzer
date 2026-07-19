@@ -10,8 +10,8 @@ import re
 
 import yaml
 
-from config import IOCConfig
-from utils import IOCMatch, NormalizedLog
+from analyzer.config import IOCConfig
+from analyzer.utils import IOCMatch, NormalizedLog
 
 
 LOGGER = logging.getLogger(__name__)

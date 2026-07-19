@@ -2,8 +2,8 @@
 
 from pathlib import Path
 
-from detector import load_rules, run_detections
-from parser import parse_logs_from_path
+from analyzer.detector import load_rules, run_detections
+from analyzer.parser import parse_logs_from_path
 
 
 def test_folder_parsing_produces_events() -> None:

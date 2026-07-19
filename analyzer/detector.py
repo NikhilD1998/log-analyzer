@@ -10,7 +10,7 @@ import logging
 
 import yaml
 
-from utils import DetectionResult, NormalizedLog, matches_patterns
+from analyzer.utils import DetectionResult, NormalizedLog, matches_patterns
 
 
 LOGGER = logging.getLogger(__name__)

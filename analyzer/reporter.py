@@ -13,8 +13,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from mitre import summarize_mitre
-from utils import DetectionResult, IOCMatch, NormalizedLog, collect_top_values, ensure_directory, timestamp_slug
+from analyzer.mitre import summarize_mitre
+from analyzer.utils import DetectionResult, IOCMatch, NormalizedLog, collect_top_values, ensure_directory, timestamp_slug
 
 
 SEVERITY_STYLES = {

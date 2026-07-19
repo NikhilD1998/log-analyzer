@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import Counter
 
-from utils import DetectionResult
+from analyzer.utils import DetectionResult
 
 
 MITRE_DESCRIPTIONS = {

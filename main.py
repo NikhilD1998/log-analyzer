@@ -8,12 +8,12 @@ from pathlib import Path
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from config import DEFAULT_CONFIG
-from detector import load_rules, run_detections
-from ioc import load_iocs, match_iocs
-from parser import parse_logs_from_path
-from reporter import build_report_payload, print_console_dashboard, write_reports
-from utils import severity_rank, setup_logging
+from analyzer.config import DEFAULT_CONFIG
+from analyzer.detector import load_rules, run_detections
+from analyzer.ioc import load_iocs, match_iocs
+from analyzer.parser import parse_logs_from_path
+from analyzer.reporter import build_report_payload, print_console_dashboard, write_reports
+from analyzer.utils import severity_rank, setup_logging
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
