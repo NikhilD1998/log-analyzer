@@ -15,6 +15,7 @@ from rich.table import Table
 
 from analyzer.mitre import summarize_mitre
 from analyzer.utils import DetectionResult, IOCMatch, NormalizedLog, collect_top_values, ensure_directory, timestamp_slug
+from collections import defaultdict
 
 
 SEVERITY_STYLES = {
@@ -76,13 +77,30 @@ def print_console_dashboard(
         console.print(mitre_table)
 
     if findings:
+        summaries = summarize_findings(findings)
+
+        preview = []
+
+        for incident in summaries[:8]:
+            severity = incident["severity"].lower()
+
+            preview.append(
+                "\n".join(
+                    [
+                        f"[{SEVERITY_STYLES[severity]}]{incident['severity'].upper()}[/] {incident['rule_name']}",
+                        f"  IP         : {incident['source_ip'] or '-'}",
+                        f"  User       : {incident['username'] or '-'}",
+                        f"  Occurrences: {incident['count']}",
+                        f"  First Seen : {incident['first_seen']}",
+                        f"  Last Seen  : {incident['last_seen']}",
+                    ]
+                )
+            )
+
         console.print(
             Panel(
-                "\n".join(
-                    f"[{SEVERITY_STYLES[result.severity.lower()]}]{result.severity.upper()}[/] {result.rule_name}: {result.description}"
-                    for result in findings[:8]
-                ),
-                title="Critical Findings Preview",
+                "\n\n".join(preview),
+                title="Incident Summary",
             )
         )
 
@@ -213,3 +231,53 @@ def _build_recommendations(findings: list[DetectionResult], ioc_matches: list[IO
     if ioc_matches:
         recommendations.append("Pivot on matched IOCs across endpoint, proxy, and DNS telemetry.")
     return recommendations
+
+def summarize_findings(findings: list[DetectionResult]) -> list[dict]:
+    """Group similar findings into incident summaries."""
+
+    grouped = defaultdict(list)
+
+    for finding in findings:
+        key = (
+            finding.rule_name,
+            finding.source_ip,
+            finding.username,
+        )
+        grouped[key].append(finding)
+
+    summaries = []
+
+    severity_order = {
+        "critical": 5,
+        "high": 4,
+        "medium": 3,
+        "low": 2,
+        "informational": 1,
+    }
+
+    for group in grouped.values():
+        group.sort(key=lambda item: item.timestamp)
+
+        first = group[0]
+
+        summaries.append(
+            {
+                "rule_name": first.rule_name,
+                "severity": first.severity,
+                "description": first.description,
+                "source_ip": first.source_ip,
+                "username": first.username,
+                "count": len(group),
+                "first_seen": group[0].timestamp,
+                "last_seen": group[-1].timestamp,
+            }
+        )
+
+    summaries.sort(
+        key=lambda item: (
+            -severity_order[item["severity"].lower()],
+            item["first_seen"],
+        )
+    )
+
+    return summaries

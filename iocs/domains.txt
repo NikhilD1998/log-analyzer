@@ -1,0 +1,8 @@
+malicious.example
+evil.example
+attacker.example
+c2.example
+dropper.example
+payload.example
+bad-domain.com
+malware.test
